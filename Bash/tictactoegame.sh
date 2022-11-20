@@ -18,7 +18,14 @@ drawBoard() {
 }
 
 turn() {
-    echo "Wybierz pole (1 - 9): "
+    if [[ $((turns%2)) == 1 ]]; then
+        symbol=$firstPlayer
+        player="gracza numer 1"
+    else 
+        symbol=$secondPlayer
+        player="gracza numer 2"
+    fi
+    echo "Kolej $player, wybierz pole (1 - 9): "
     read choice
     if ! [[ $choice =~ $pattern ]]; then
         echo "Nieprawdiłowe pole, wybierz jeszcze raz"
@@ -27,11 +34,7 @@ turn() {
         echo "Zajęte pole, wybierz jeszcze raz"
         turn
     fi
-    if [[ $((turns%2)) == 1 ]]; then
-        board[$choice]=$firstPlayer
-    else
-        board[$choice]=$secondPlayer
-    fi
+    board[$choice]=$symbol
     checkBoard
 }
 
