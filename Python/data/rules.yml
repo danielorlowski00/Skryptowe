@@ -1,0 +1,28 @@
+version: "3.1"
+
+rules:
+
+  - rule: Say hello anytime the user says hello
+    steps:
+    - intent: greet
+    - action: utter_greet
+
+  - rule: Say goodbye anytime the user says goodbye
+    steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+  - rule: Say yes/no anytime the user asks if open on given time
+    steps:
+    - intent: ask_if_open
+    - action: action_open
+
+  - rule: Answer with menu anytime user asks for it
+    steps:
+      - intent: menu
+      - action: action_menu
+
+  - rule: Answer with preparation time and price anytime user orders
+    steps:
+      - intent: order
+      - action: action_order

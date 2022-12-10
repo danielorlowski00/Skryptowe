@@ -1,0 +1,45 @@
+version: "3.1"
+
+stories:
+- story: Ask if restaurant is open
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_if_open
+  - action: action_open
+  - intent: affirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: Ask about menu
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: menu
+  - action: action_menu
+  - intent: affirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: Order food without asking about menu
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: order
+  - action: action_order
+  - intent: affirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: Order food with asking about menu
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: menu
+  - action: action_menu
+  - intent: order
+  - action: action_order
+  - intent: affirm
+  - intent: goodbye
+  - action: utter_goodbye
+

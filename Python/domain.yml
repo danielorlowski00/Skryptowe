@@ -1,0 +1,50 @@
+version: "3.1"
+
+intents:
+  - greet
+  - affirm
+  - goodbye
+  - ask_if_open
+  - menu
+  - order
+
+actions:
+- action_open
+- action_order
+- action_menu
+
+entities:
+  - day
+  - hour
+  - meal
+
+slots:
+  day:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: day
+  hour:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: hour
+  meal:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: meal
+
+responses:
+  utter_greet:
+  - text: "Hey!"
+
+  utter_goodbye:
+  - text: "Bye"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
