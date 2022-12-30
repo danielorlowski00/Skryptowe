@@ -1,0 +1,100 @@
+function buildBlocksOnRoof(block: Block, firstPosition: Position, secondPosition: Position) {
+    let xPosition = firstPosition.getValue(Axis.X);
+    let yPosition = firstPosition.getValue(Axis.Y);
+    let zPosition = firstPosition.getValue(Axis.Z);
+    if (secondPosition.getValue(Axis.X) == firstPosition.getValue(Axis.X)) {
+        for (let i = 0; i <= Math.abs(secondPosition.getValue(Axis.Z) - firstPosition.getValue(Axis.Z)); i += 2) {
+            if (firstPosition.getValue(Axis.Z) < secondPosition.getValue(Axis.Z)) {
+                blocks.place(block, pos(xPosition, yPosition, zPosition + i));
+            }
+            else {
+                blocks.place(block, pos(xPosition, yPosition, zPosition - i));
+            }
+
+        }
+    } else {
+        for (let i = 0; i <= Math.abs(secondPosition.getValue(Axis.X) - firstPosition.getValue(Axis.X)); i += 2) {
+            if (firstPosition.getValue(Axis.X) < secondPosition.getValue(Axis.X)) {
+                blocks.place(block, pos(xPosition + i, yPosition, zPosition));
+            }
+            else {
+                blocks.place(block, pos(xPosition - i, yPosition, zPosition));
+            }
+        }
+    }
+}
+
+function buildBridge(block: Block, firstPosition: Position, secondPosition: Position) {
+    for (let i = 0; i <= Math.abs(secondPosition.getValue(Axis.X) - firstPosition.getValue(Axis.X)); i++) {
+        blocks.place(block, pos(firstPosition.getValue(Axis.X) - i, firstPosition.getValue(Axis.Y) - 1, firstPosition.getValue(Axis.Z) + 1));
+    }
+    blocks.fill(
+        block,
+        pos(firstPosition.getValue(Axis.X), firstPosition.getValue(Axis.Y), firstPosition.getValue(Axis.Z)),
+        pos(secondPosition.getValue(Axis.X), secondPosition.getValue(Axis.Y), secondPosition.getValue(Axis.Z)),
+        FillOperation.Replace
+    );
+}
+
+function buildEntrance(position: Position) {
+    for (let i = 0; i <= 3; i++) {
+        for (let j = 0; j <= 2; j++) {
+            blocks.place(AIR, position.add(pos(-i, j, 0)));
+        }
+    }
+}
+
+function buildGround(block: Block, firstPosition: Position, secondPosition: Position) {
+    blocks.fill(block, firstPosition, secondPosition);
+}
+
+function buildWallWithWindow(block: Block, firstPosition: Position, secondPosition: Position) {
+    blocks.fill(block, firstPosition, secondPosition);
+    let xPosition = (secondPosition.getValue(Axis.X) + firstPosition.getValue(Axis.X)) / 2;
+    let yPosition = (secondPosition.getValue(Axis.Y) + firstPosition.getValue(Axis.Y)) / 2;
+    let zPosition = (secondPosition.getValue(Axis.Z) + firstPosition.getValue(Axis.Z)) / 2;
+    if (secondPosition.getValue(Axis.X) === firstPosition.getValue(Axis.X)) {
+        blocks.fill(GLASS, pos(xPosition, yPosition - 1, zPosition - 3), pos(xPosition, yPosition + 1, zPosition + 3));
+    }
+    else {
+        blocks.fill(GLASS, pos(xPosition - 5, yPosition - 1, zPosition), pos(xPosition + 5, yPosition + 1, zPosition));
+    }
+}
+
+function buildTower(block: Block, firstPosition: Position, secondPosition: Position, height: number) {
+    secondPosition = secondPosition.add(pos(0, height, 0));
+    blocks.fill(block, firstPosition, secondPosition);
+    fillWithAir(firstPosition.add(pos(1, 0, 1)), secondPosition.add(pos(-1, 0, -1)));
+    firstPosition = firstPosition.add(pos(0, height, 0));
+    for (let i = 0; i <= Math.abs(secondPosition.getValue(Axis.X) - firstPosition.getValue(Axis.X)); i++) {
+        if (i % 2 == 0) {
+            blocks.place(block, firstPosition.add(pos(i, 1, 0)));
+            blocks.place(block, firstPosition.add(pos(0, 1, i)));
+            blocks.place(block, secondPosition.add(pos(-i, 1, 0)));
+            blocks.place(block, secondPosition.add(pos(0, 1, -i)));
+        }
+    }
+}
+
+function fillWithAir(firstPosition: Position, secondPosition: Position) {
+    blocks.fill(AIR, firstPosition, secondPosition);
+}
+
+buildGround(STONE_BRICKS, pos(15, -3, -5), pos(-25, 0, -35));
+buildWallWithWindow(IRON_BLOCK, pos(10, 1, -10), pos(10, 10, -30));
+buildWallWithWindow(IRON_BLOCK, pos(10, 1, -30), pos(-20, 10, -30));
+buildWallWithWindow(IRON_BLOCK, pos(-20, 1, -30), pos(-20, 10, -10));
+buildWallWithWindow(IRON_BLOCK, pos(-20, 1, -10), pos(10, 10, -10));
+buildGround(GOLD_BLOCK, pos(9, 10, -11), pos(-19, 10, -29));
+buildBlocksOnRoof(DIAMOND_BLOCK, pos(10, 11, -10), pos(10, 11, -30));
+buildBlocksOnRoof(DIAMOND_BLOCK, pos(10, 11, -30), pos(-20, 11, -30));
+buildBlocksOnRoof(DIAMOND_BLOCK, pos(-20, 11, -30), pos(-20, 11, -10));
+buildBlocksOnRoof(DIAMOND_BLOCK, pos(-20, 11, -10), pos(10, 11, -10));
+buildGround(WATER, pos(14, -2, -6), pos(11, 0, -34));
+buildGround(WATER, pos(14, -2, -34), pos(-24, 0, -31));
+buildGround(WATER, pos(-24, -2, -34), pos(-21, 0, -6));
+buildGround(WATER, pos(-24, -2, -6), pos(14, 0, -9));
+buildBridge(BLOCK_OF_QUARTZ, pos(-4, 0, -5), pos(-7, 0, -9));
+buildEntrance(pos(-4, 1, -10));
+buildTower(REDSTONE_BLOCK, pos(-17, 11, -24), pos(-11, 11, -18), 9);
+buildTower(REDSTONE_BLOCK, pos(1, 11, -24), pos(7, 11, -18), 9);
